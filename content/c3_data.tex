@@ -1,0 +1,39 @@
+\section{Data and methods}
+\subsection{Subsection 1}
+\justify
+Here be data and methods. Lots of data was used in this thesis (table~\ref{tab:example_table}).
+
+% prevent hyphenation with nohyphenation
+% place table exactly here with [H]
+% use \arraystretch and \tabcolsep to control space between columns and rows
+\begin{hyphenrules}{nohyphenation}
+    \begin{table}[H]
+        \centering
+        \caption[This is table name for list of contents]{This is the full length caption shown only here with the table.} 
+        \label{tab:example_table}
+        \def\arraystretch{1.2}
+        \setlength\tabcolsep{1.2ex}
+        % use \raggedright\arraybackslash}p{} for better control of multiple rows in one cell
+        \begin{tabular}{ @{} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}p{4cm} >{\raggedleft\arraybackslash}p{3cm} @{} }
+            \toprule
+            Column 1 & Column 2 & Column 3 & Column 4 \\
+            \midrule
+            % NB, manual positioning of the multirow label. I could not automatically position multirow in the middle. Can you do it?
+            \multirow{3}{*}[-5ex]{Multirow 1} & Row 1 & Nulla vel tellus id lorem & \cite{Geurs2004} \\
+            & Row 2 & lorem ipsum & \cite{Geurs2004} \\
+            & Row 3 & Nulla vel tellus id lorem tincidunt tristique. & \cite{Geurs2004} \\
+            \greyrule
+            \multirow{4}{*}[-7ex]{Multirow 2} & Row 4 & Lorem ipsum dolor sit amet, consectetur adipiscing elit. & \cite{Geurs2004} \\
+            & Row 5 & Lorem ipsum dolor sit amet & \cite{Geurs2004} \\
+            & Row 6 & Lorem ipsum dolor & \cite{Geurs2004} \\
+            & Row 7 & consectetur adipiscing elit. & \cite{Geurs2004} \\
+            \greyrule
+            \multirow{4}{*}[-12.0ex]{Multirow 3} & Row 8 & consectetur adipiscing & \cite{Geurs2004} \\
+            & Row 9 & Lorem ipsum dolor sit amet, consectetur adipiscing elit. & \cite{Geurs2004} \\
+            & Row 10 & adipiscing elit. & \cite{Geurs2004} \\
+            & Row 11 & Lorem ipsum dolor sit amet \cite{Geurs2004} \\
+            & Row 12 & Curabitur interdum felis vestibulum orci luctus blandit vitae a felis & \cite{Geurs2004} \\
+            \bottomrule
+        \end{tabular}
+    \end{table} 
+\end{hyphenrules}

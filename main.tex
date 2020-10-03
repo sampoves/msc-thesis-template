@@ -1,0 +1,373 @@
+% Sampo Vesanen notes:
+% This is my master's thesis template, finalised on 15st March 2019
+
+% Features
+%%% through custom made \newtranslatorcommand, strings can be multilingual
+%%% Most of strings are defined the header of this document, resulting in minimal need of repetition
+%%% Thesis name is defined in a \newcommand, change it and all instances (\title command, title page and abstracts) of the name in the thesis will be updated.
+%%% Thesis author is defined in a \newcommand, change it and all instances of author title will be updated
+%%% All dates are automatic and will always be the current date. This includes title page and abstract pages
+%%% Numbering of pages is automatic and starts from the page with section Introduction. Also, number of pages in abstracts are automatic. Numbering starts at \setcounter{page}{1}. Appendices are not counted in page count.
+%%% Thesis content is located in content-folder. This makes thesis writing more modular and reduces code clutter
+%%% Thesis has page elements in a separate elements-folder. This is used for title page content and abstract tabularx table creation. You don't need to touch Elements folder if you only want to change the text in them. Instead, use the \newcommands and \newtranslatorcommands below.
+%%% Mendeley references are set up and refer to references.bib
+
+% Multifile LaTeX project:
+%%% https://www.overleaf.com/learn/latex/Multi-file_LaTeX_projects
+%%% https://en.wikibooks.org/wiki/LaTeX/Modular_Documents
+% How to write a thesis in LaTeX
+%%% https://www.overleaf.com/learn/latex/How_to_Write_a_Thesis_in_LaTeX_(Part_1):_Basic_Structure
+% Microtype for thesis: 
+%%% http://www.khirevich.com/latex/microtype/
+% Multilanguage code adaptation from:
+%%% https://tex.stackexchange.com/q/42784/182586
+
+%  NB: It can be argued that the \documentclass should be {report} for a thesis
+\documentclass[a4paper,11pt]{article}
+
+% Set margins -----------------------------------------------------------
+\usepackage{geometry}
+\geometry{a4paper,total={170mm,257mm},left=20mm,right=20mm,}
+
+
+% Font and layout settings ----------------------------------------------
+\usepackage[activate={true,nocompatibility},tracking=true,kerning=true,factor=1100,stretch=10,shrink=10]{microtype}
+\usepackage[finnish,english]{babel}         % Set languages. Last in list is main language
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{ragged2e}                       % Justify text. Command: \justify
+\usepackage{lastpage}                       % Get amount of pages
+\usepackage{color}                          % Enable \textcolor{}{}
+\usepackage{minted}                         % Format and highlight code
+\usepackage{enumitem}                       % Control layout of itemize, enumerate, description
+\usepackage{pdfpages}                       % pdf graphics
+\renewcommand{\baselinestretch}{1.5}        % Set line spacing
+\setlength{\abovecaptionskip}{15pt plus 3pt minus 2pt}
+\setlength{\belowcaptionskip}{15pt plus 3pt minus 2pt}
+\usepackage{csquotes}                       % Enable displayquote
+
+% define \code{}: StackExchange style inline code ----------------------
+\usepackage{soul}                           % typesetting with colour, supports linebreak (\colorbox on its own does not)
+\usepackage[table]{xcolor}                  % use in horizontal lines in tables
+
+% \ctext colorbox height
+\makeatletter
+    \def\SOUL@hlpreamble{%
+        \setul{}{3.33ex}%                   default is 2.5ex
+        \let\SOUL@stcolor\SOUL@hlcolor
+        \SOUL@stpreamble
+    }
+\makeatother
+
+% make note of thinspaces, enable thin whitespace inside \ctext colorbox
+\newcommand{\ctext}[3][RGB]{%               Define \ctext
+    \begingroup
+        \definecolor{hlcolor}{#1}{#2}\sethlcolor{hlcolor}%
+        \hl{\thinspace #3\thinspace}%
+    \endgroup
+}
+\newcommand{\code}[1]{\texttt{\ctext[RGB]{242,242,242}{#1}}} % define \code command
+
+
+% Generate list of abbreviations ---------------------------------------
+\usepackage{xurl}                               % xurl linebreaks long links
+\usepackage[breaklinks=true]{hyperref}          % Hyperlinks. Need to be activated before glossaries
+\usepackage[acronym,style=super4col]{glossaries}% Glossaries and lists of acronyms
+
+
+% Abbreviations --------------------------------------------------------
+% Note the definition of plural forms where applicable
+\newacronym{anova}{ANOVA}{Analysis of Variance test}
+\newacronym[plural=IDEs,firstplural=Integrated development environments (IDE)]{ide}{IDE}{Integrated Development Environment}
+\newacronym{php}{PHP}{Hypertext preprocessor}
+
+% Nomenclature for glossary --------------------------------------------
+% Note the definition of plural forms
+\newglossaryentry{CPU}{
+  name = {CPU},
+  description = {Central Processing Unit},
+  plural = {CPUs},
+  firstplural = {\glsentrydesc{CPU}s (\glsentryplural{CPU})}
+}
+\newglossaryentry{GB}{
+  name = {GB},
+  description = {Gigabyte is a multiple of the unit used to store digital information. A gigabyte is 1 000 megabytes},
+}
+\newglossaryentry{mysql}{
+  name = {MySQL},
+  description = {Open-source relational database management system},
+}
+\newglossaryentry{RAM}{
+  name = {RAM},
+  description = {Random Access Memory},
+}
+
+\makeglossaries
+
+% Datetime settings  ------------------------------------------------------
+\usepackage[ddmmyyyy]{datetime}             % Change format of datetime
+%\newdateformat{mydate}{%
+%    \onedigit{\THEDAY}.\onedigit{\THEMONTH}.\THEYEAR} % remove unnecessary zeroes in date
+\newdateformat{mydate}{%
+    {\THEDAY}.{\THEMONTH}.\THEYEAR}         % The one above causes undefined control sequence   
+\newdateformat{monthyeardate}{%
+    \monthname[\THEMONTH] \THEYEAR}         % mm/yyyy date format for English abstract
+\newcommand*{\printfindate}{%               % Get Finnish months and year for the Finnish abstract
+   \ifcase \month\or Tammikuu\or Helmikuu\or Maaliskuu\or Huhtikuu\or Toukokuu\or Kesäkuu\or Heinäkuu\or Elokuu\or Syyskuu\or Lokakuu\or Marraskuu\or Joulukuu\fi \space \number\year}
+
+
+% Images related packages and settings ------------------------------------
+\usepackage{rotating, graphicx}
+\graphicspath{ {images/} }
+
+
+% References and reference styles -----------------------------------------
+\usepackage{natbib}                         % Flexible bibliography support
+\bibliographystyle{apalike2}                
+\setcitestyle{authoryear,open={},close={}}  % Removes citation parentheses
+
+% Define new command \fullref to reference both section number and name
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1}, \nameref*{#1}}}
+
+
+% Other packages ----------------------------------------------------------
+%\usepackage{alphabeta}                      % Greek alphabet
+\usepackage{amsmath}                        % AMS mathematical facilities, equations
+\usepackage{subfig}                         % Enable collections of subfigures as a single figure
+\usepackage{gensymb}                        % Generic symbols for both text and math mode
+\usepackage{float}                          % Improved interface for floating objects
+\usepackage{pdfpages}                       % Include PDF documents in LaTeX
+\usepackage{listings}                       % Typeset source code listings using LaTeX
+\usepackage{import}                         % Establish input relative to a directory
+
+
+% Tables -----------------------------------------------------------------
+\usepackage{array}                          % For table properties such as p{2cm}
+\usepackage{tabularx}                       % Tabulars with adjustable-width columns
+\usepackage{makecell}                       % Thicker vline
+\usepackage{chngpage}                       % Allows for temporary adjustment of side margins
+\usepackage{longtable}                      % Allows tables to span multiple pages
+\usepackage{cellspace}                      % Ensure minimal spacing of table cells
+\usepackage{booktabs}                       % Extra commands for tables
+\usepackage{multirow}                       % Enable table cells which can span multiple rows
+\usepackage{colortbl}                       % set custom colors for midrules
+\usepackage{tablefootnote}                  % footnotes in tabular environment
+\setlength{\cellspacetoplimit}{6pt}
+\setlength{\cellspacebottomlimit}{6pt}
+\addparagraphcolumntypes{X}
+\newcolumntype{?}{!{\vrule width 1.5pt}}    % thicker vline for tabularx
+\newcommand\Tstrut{\rule{0pt}{2.2ex}}       % Define "top" strut
+\newcommand\Bstrut{\rule[-4.0ex]{0pt}{0pt}} % Define "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut}       % Run top & bottom struts for rows
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+% \usepackage[table]{xcolor} and \usepackage{booktabs} to define a lighter midrule
+\newcommand{\greyrule}{\arrayrulecolor{black!30}\midrule\arrayrulecolor{black}}
+
+% Define extra wide column separators C (centering) and L (left-align)
+\newlength\tbspace
+\setlength\tbspace{0.5cm}
+\newcolumntype{C}{c<{\hspace{\tbspace}}}%
+\newcolumntype{L}{l<{\hspace{\tbspace}}}%
+
+% Translator command setup -----------------------------------------------
+% this enables us to use multilanguage strings which works with package babel
+\newcommand{\newtranslatorcommand}[3]{%
+    \newcommand{#1}{%
+        \iflanguage{english}{#2}{%
+        \iflanguage{finnish}{#3}{%
+        }}%
+    }%
+}
+
+% Title page settings -----------------------------------------------------
+\usepackage{setspace}                       % Different line spacing than document default
+\newcommand{\myname}{                       % This string represents thesis author in the document
+    Geralt Roger Eric du Haute-Bellegarde%
+}
+\newcommand{\mysupervisor}{%
+    Supervisor's name%
+}
+\newcommand{\addressFirst}{%
+    PL 64 (University gatan 2)
+}
+\newcommand{\addressSecond}{%
+    00014 Helsingin yliopisto%
+}
+
+% Abstract page settings --------------------------------------------------
+% THESIS MULTILANGUAGE STRINGS
+% Multilanguage code is adapted from here:
+% https://tex.stackexchange.com/questions/42784/language-dependent-custom-command
+\newtranslatorcommand{\mytitle}{%
+    Thesis name%
+}{%
+    Gradun nimi%
+}
+
+% Choose correct date format for abstract
+\newtranslatorcommand{\translatedate}{%
+    \monthyeardate\today%
+}{%
+    \printfindate%
+}
+
+% PAGE COUNT MULTILANUAGE STRING
+\newtranslatorcommand{\mypages}{%
+    \pageref{myLastPage} pages and appendices%
+}{%
+    \pageref{myLastPage} sivua ja liitteet%
+}
+
+% UNIVERSITY MULTILANGUAGE STRING
+\newtranslatorcommand{\myuni}{%
+    University of Helsinki%
+}{%
+    Helsingin yliopisto%
+}
+
+% FACULTY MULTILANGUAGE STRING
+\newtranslatorcommand{\myfaculty}{%
+    Faculty of Your Choosing%
+}{%
+    Tiedekunnan nimi%
+}
+
+% DEPARTMENT MULTILANGUAGE STRING
+\newtranslatorcommand{\mydept}{%
+    Department name%
+}{%
+    Osaston nimi%
+}
+
+% GEOGRAPHY MULTILANGUAGE STRING
+\newtranslatorcommand{\mysubject}{%
+    Subject
+}{%
+    Oppiaine
+}
+
+% GEOINFORMATICS MULTILANGUAGE STRING
+\newtranslatorcommand{\mySpecSubject}{%
+    Specific subject%
+}{%
+    Tarkka aine%
+}
+
+% THESIS TYPE MULTILANGUAGE STRING
+\newtranslatorcommand{\mythesis}{%
+    Master's thesis%
+}{%
+    Pro gradu -tutkielma%
+}
+
+% CHOOSE CORRECT ABSTRACT LANGUAGE
+\newtranslatorcommand{\myabstract}{%
+    \import{content/}{abstract_en.tex}%
+}{%
+    \import{content/}{abstract_fi.tex}%
+}
+
+% KEYWORDS MULTILANGUAGE STRING
+\newtranslatorcommand{\mykeywords}{%
+    Keyword1, keyword2, keyword3%
+}{%
+    Avainsana1, avainsana2, avainsana3%
+}
+
+% LIBRARY MULTILANGUAGE STRING
+\newtranslatorcommand{\mylibrary}{%
+    A campus science library%
+}{%
+    Jonkin kampuksen tiedekirjasto%
+}
+
+% OTHER INFO MULTILANGUAGE STRING
+\newtranslatorcommand{\myotherinfo}{%
+    -%
+}{%
+    -%
+}
+
+\title{\mytitle}
+\author{\myname}
+\date{\today}
+
+
+% BEGIN DOCUMENT PROPER ---------------------------------------------------
+\begin{document}
+
+% TITLE PAGE
+\import{elements/}{titlepage.tex}
+
+%%% 1ST ABSTRACT PAGE, ENGLISH
+\newpage
+\import{elements/}{abstract.tex}
+
+%%% 2ND ABSTRACT PAGE, FINNISH
+\newpage
+\begin{otherlanguage*}{finnish}
+\import{elements/}{abstract.tex}
+\end{otherlanguage*}
+
+% TABLE OF CONTENTS
+\newpage
+\selectlanguage{english}
+\thispagestyle{empty}
+\renewcommand*\contentsname{Table of contents} % Set custom name for ToC
+\tableofcontents
+
+% LIST OF FIGURES
+\newpage
+\listoffigures
+\thispagestyle{empty}
+
+% LIST OF TABLES
+\listoftables
+
+% LIST OF ABBREVIATIONS
+\newpage
+\printglossary[type=\acronymtype,title=List of abbreviations]
+\printglossary[title=Nomenclature]
+\thispagestyle{empty}
+
+% INTRODUCTION AND RESEARCH QUESTIONS
+\newpage
+\setcounter{page}{1} % set page numbering to start from here
+\import{content/}{c1_introduction.tex}
+
+% THEORETICAL BACKGROUND
+\newpage
+%\include{content/c2_background}
+\import{content/}{c2_background.tex}%
+
+% DATA AND METHODS
+\newpage
+%\include{content/c3_data}
+%\input{content/c3_data}
+\import{content/}{c3_data.tex}%
+
+% RESULTS
+\newpage
+\import{content/}{c4_results.tex}
+
+% DISCUSSION
+\newpage
+\import{content/}{c5_discussion.tex}
+
+% REFERENCES
+% Connect Mendeley references to Overleaf bib file
+\newpage
+\label{myLastPage} % this label defines the last page to be included in page count
+\section{References}
+\renewcommand{\refname}{}
+\bibliography{references.bib}
+
+% APPENDICES
+\newpage
+\pagenumbering{gobble} % suppress appendices page numbering from page and table of contents 
+\import{content/}{appendices.tex}
+
+
+\end{document}

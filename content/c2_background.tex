@@ -1,0 +1,36 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{Subsection 1}
+\justify
+Hello. Long acronym \acrfull{anova}. Short acronym \acrshort{anova}.
+
+\subsection{Subsection 2}
+\justify
+Hello again. Glossary item \gls{RAM}.
+
+\subsection{Subsection 3}
+\justify
+Hello thrice.
+
+
+\begin{figure}[H]%
+    \centering
+    % use decimals to control size of the image
+    \includegraphics[width=.5\textwidth]{images/500_x_500_SMPTE_Color_Bars.png}
+    \caption[Nice image]{Image by Guy Macon - Own work, CC0, \textcolor{blue}{\url{https://commons.wikimedia.org/w/index.php?curid=32910387}}}%
+    \label{fig:image1}%
+\end{figure}
+
+% use trim= and clip to clip images.
+% trim={<left> <lower> <right> <upper>}
+\begin{figure}[H]%
+    \centering
+    \subfloat[Subimage1]{{\includegraphics[width=7.5cm]{500_x_500_SMPTE_Color_Bars.png} }}%
+    \quad
+    \subfloat[Subimage2]{{\includegraphics[width=7.5cm]{500_x_500_SMPTE_Color_Bars.png} }}%
+    \quad
+    \subfloat[Subimage3]{{\includegraphics[trim={0 5cm 0 0},clip,width=7.5cm]{500_x_500_SMPTE_Color_Bars.png} }}%
+    \caption[dsa]{Many images in one bunch.}%
+    \label{fig:tripleimage}%
+\end{figure}
